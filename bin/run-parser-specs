@@ -48,7 +48,7 @@ function main(int $argc, array $argv): int {
         echo "\033[32;1mAll specs passed.\033[0m\n";
     }
 
-    return 0;
+    exit(count($errors));
 }
 
 function format_command_for_spec(string $command, string $spec): string {
@@ -78,4 +78,4 @@ function red_cross(): void {
     echo "\x1b[31mx\033[0m";
 }
 
-return main($argc - 1, array_slice($argv, 1));
+main($argc - 1, array_slice($argv, 1));
