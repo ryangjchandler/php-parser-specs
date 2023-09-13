@@ -1,0 +1,81 @@
+#!/usr/bin/env php
+<?php
+
+function main(int $argc, array $argv): int {
+    if ($argc === 0 || has_flag('help', 'h', $argv)) {
+        help();
+        return 0;
+    }
+
+    $command = $argv[0];
+    $directory = __DIR__ . '/../specs/';
+    $specs = new DirectoryIterator($directory);
+    $errors = [];
+
+    foreach ($specs as $spec) {
+        if ($spec->isDot()) {
+            continue;
+        }
+
+        $test = format_command_for_spec($command, $spec->getRealPath());
+
+        exec($test, $output, $result);
+
+        if ($result === 0) {
+            green_tick();
+        } else {
+            red_cross();
+            $errors[$spec->getFilename()] = $output;
+        }
+
+        unset($output);
+        unset($result);
+    }
+
+    echo "\n";
+
+    if (count($errors) > 0) {
+        echo "\x1b[31;1m" . count($errors) . " failed spec(s).\033[0m\n";
+        echo "--------------------\n";
+
+        foreach ($errors as $file => $error) {
+            echo "\033[1m$file\033[0m";
+            echo implode(PHP_EOL, $error);
+        }
+
+        echo "\n";
+    } else {
+        echo "\033[32;1mAll specs passed.\033[0m\n";
+    }
+
+    return 0;
+}
+
+function format_command_for_spec(string $command, string $spec): string {
+    if (! str_contains($command, '$$')) {
+        return $command . ' ' . $spec;
+    }
+
+    return str_replace('$$', $spec, $command);
+}
+
+function has_flag(string $long, string $short, array $argv): bool {
+    return in_array("--{$long}", $argv) || in_array("-{$short}", $argv);
+}
+
+function help(): void {
+    echo "usage: run-parser-specs <command> [options]\n";
+    echo "\n";
+    echo "options:\n";
+    echo "    --help, -h    Display this help message.\n";
+}
+
+function green_tick(): void {
+    echo "\033[32m✓\033[0m";
+}
+
+function red_cross(): void {
+    echo "\x1b[31mx\033[0m";
+}
+
+return main($argc - 1, array_slice($argv, 1));
