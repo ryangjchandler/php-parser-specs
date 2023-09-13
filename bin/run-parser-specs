@@ -52,11 +52,11 @@ function main(int $argc, array $argv): int {
 }
 
 function format_command_for_spec(string $command, string $spec): string {
-    if (! str_contains($command, '$$')) {
+    if (! str_contains($command, '<>')) {
         return $command . ' ' . $spec;
     }
 
-    return str_replace('$$', $spec, $command);
+    return str_replace('<>', $spec, $command);
 }
 
 function has_flag(string $long, string $short, array $argv): bool {

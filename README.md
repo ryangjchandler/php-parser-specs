@@ -16,10 +16,10 @@ The test runner accepts a single argument &mdash; the name of a binary, or comma
 
 By default, the file will be appended to the given command and executed. The return code of the command is used to determine success. If a non-zero return code is detected, the output will be captured and output in the terminal.
 
-If you are passing a command and would like to change where or how the file name is passed through, you can use the `$$` placeholder in the command string.
+If you are passing a command and would like to change where or how the file name is passed through, you can use the `<>` placeholder in the command string.
 
 ```sh
-./bin/run-parser-specs "./program --only-parse=$$"
+./bin/run-parser-specs "./program --only-parse=<>"
 ```
 
 This will execute the command `./program --only-parse=path/to/spec/file.php`.
