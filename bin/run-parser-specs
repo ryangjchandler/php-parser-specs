@@ -67,7 +67,7 @@ function help(): void {
     echo "usage: run-parser-specs <command> [options]\n";
     echo "\n";
     echo "options:\n";
-    echo "    --help, -h    Display this help message.\n";
+    echo "    --help, -h     Display this help message.\n";
 }
 
 function green_tick(): void {
